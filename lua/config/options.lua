@@ -30,3 +30,5 @@ opt.listchars = {
 
 opt.scrolloff = 5
 opt.cursorline = true
+
+opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'

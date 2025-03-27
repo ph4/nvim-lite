@@ -26,6 +26,16 @@ return {
     config = true,
   },
   {
-    'rmagatti/auto-session',
+    'olimorris/persisted.nvim',
+    ignored_dirs = {
+      { '~', exact = true },
+      '/tmp/',
+      '/var/tmp',
+    },
+    keys = {
+      { '<leader>sl', '<cmd>SessionLoadLast<CR>', desc = 'Load last session' },
+      { '<leader>ss', '<cmd>Telescope persisted<CR>', desc = 'Search saved sessions' },
+      { '<leader>sc', '<cmd>SessionLoad<CR>', desc = 'Load session for cwd' },
+    },
   },
 }

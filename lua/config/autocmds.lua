@@ -22,3 +22,16 @@ vim.api.nvim_create_autocmd('FileType', {
   },
   callback = function(event) vim.keymap.set('n', '<esc>', '<cmd>close<cr>', { buffer = event.buf, silent = true }) end,
 })
+
+local dont_save_filetypes = { 'neo-tree', 'toggleterm' }
+
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'PersistedSavePre',
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      for _, ft in ipairs(dont_save_filetypes) do
+        if vim.bo[buf].filetype == ft then vim.api.nvim_buf_delete(buf, { force = true }) end
+      end
+    end
+  end,
+})

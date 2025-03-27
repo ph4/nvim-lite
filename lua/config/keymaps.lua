@@ -1,5 +1,4 @@
 local map = vim.keymap.set
-opts = {}
 
 local function nmap(...) map('n', ...) end
 
