@@ -4,10 +4,10 @@ return {
     'mhinz/vim-sayonara',
     keys = {
       --{ '<leader>x', [[<cmd>x!<cr>]] },
-      { '<leader>q', [[<cmd>Sayonara<cr>]], desc = 'Sayonara! close buffer' },
-      { '<leader>Q', [[<cmd>bufdo :Sayonara<cr>]], desc = 'Sayonara! close buffer' },
-      { '<leader>d', [[<cmd>Sayonara!<cr>]], desc = 'Sayonara close all' },
-      { '<leader>D', [[<cmd>bufdo :Sayonara!<cr>]], desc = 'Sayonara close all' },
+      { '<leader>q', [[<cmd>Sayonara<cr>]], desc = 'Close buffer & window' },
+      { '<leader>Q', [[<cmd>bufdo :Sayonara<cr>]], desc = 'Close all buffers and windows' },
+      { '<leader>d', [[<cmd>Sayonara!<cr>]], desc = 'Close buffer' },
+      { '<leader>D', [[<cmd>bufdo :Sayonara!<cr>]], desc = 'Close all buffers' },
     },
     config = function()
       --vim.g.sayonara_filetypes = { --['qf'] = '' }
