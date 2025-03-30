@@ -78,8 +78,14 @@ return {
   },
   {
     'rcarriga/nvim-notify',
-    init = function() vim.notify = require('notify') end,
-  },
+    init = function()
+        -- Hack otherwise notify complains when I open telescope
+        local notify = require('notify')
+        local hl = vim.api.nvim_get_hl(0, {name='Normal'})
+        notify.setup({ background_colour = string.format('#%06x', hl.bg) }) ---@diagnostic disable-line: undefined-field
+        vim.notify = notify
+    end,
+    },
   {
     'akinsho/toggleterm.nvim',
     cmd = 'ToggleTerm',
