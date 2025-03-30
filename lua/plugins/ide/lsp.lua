@@ -1,5 +1,13 @@
 return {
   {
+    'williamboman/mason.nvim',
+    config = true,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    config = true,
+  },
+  {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     dependencies = {
@@ -7,9 +15,6 @@ return {
       'williamboman/mason-lspconfig.nvim',
     },
     config = function()
-      require('mason').setup()
-      require('mason-registry')
-      require('mason-lspconfig').setup()
       local lspconfig = require('lspconfig')
       local default_on_attach = function(_client, bufnr)
         local mappings = {

@@ -17,7 +17,6 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
     event = 'VeryLazy',
     dependencies = {
-      'neovim/nvim-lspconfig', -- ensure it is loaded afrer all of the lsp configuration is done
       'williamboman/mason.nvim',
       'mfussenegger/nvim-dap',
     },
