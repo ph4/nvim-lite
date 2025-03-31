@@ -17,6 +17,15 @@ return {
     config = function()
       local lspconfig = require('lspconfig')
       local default_on_attach = function(_client, bufnr)
+        local hover = function ()
+          if vim.bo.filetype == 'help' then
+            vim.cmd(':help ' .. vim.fn.fnameescape(vim.fn.expand('<cword>')) .. '\n')
+          elseif vim.lsp.get_clients({bufnr = bufnr}) then
+            vim.lsp.buf.hover()
+          else
+            vim.cmd(':help ' .. vim.fn.fnameescape(vim.fn.expand('<cword>')) .. '\n')
+          end
+        end
         local mappings = {
           { '[d', vim.diagnostic.goto_prev, desc = 'Previous diagnostic' },
           { ']d', vim.diagnostic.goto_next, desc = 'Next diagnostic' },
@@ -27,7 +36,7 @@ return {
           { 'gr', vim.lsp.buf.references, desc = 'Go to references' },
           { 'gi', vim.lsp.buf.implementation, desc = 'Go to implementation' },
           { 'gt', vim.lsp.buf.type_definition, desc = 'Go to type definition' },
-          { 'K', vim.lsp.buf.hover, desc = 'Document hover' },
+          { 'K', hover, desc = 'Document hover' },
 
           { '<leader>r', vim.lsp.buf.rename, desc = 'Rename symbol' },
           { '<leader>a', vim.lsp.buf.code_action, desc = 'Code action' },

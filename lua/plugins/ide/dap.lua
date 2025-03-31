@@ -27,7 +27,6 @@ return {
           local mason_registry = require('mason-registry')
           local codelldb_path = mason_registry.get_package('codelldb'):get_install_path()
             .. '/extension/adapter/codelldb'
-          vim.notify(codelldb_path)
 
           config.adapters = {
             type = 'server',

@@ -23,5 +23,5 @@ tmap('<C-j>', [[<cmd>wincmd j<CR>]])
 tmap('<C-k>', [[<cmd>wincmd k<CR>]])
 tmap('<C-l>', [[<cmd>wincmd l<CR>]])
 
-nmap('<leader>pb', '<cmd> DapToggleBreakpoint <CR>')
-nmap('<leader>pr', '<cmd> DapContinue <CR>')
+nmap('<leader>pb', '<cmd>DapToggleBreakpoint<CR>')
+nmap('<leader>pr', '<cmd>DapContinue<CR>')
