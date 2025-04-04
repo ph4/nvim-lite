@@ -32,7 +32,9 @@ return {
       '/tmp/',
       '/var/tmp',
     },
+    init = function() require('which-key').add { '<leader>s', group = 'Sessions' } end,
     keys = {
+
       { '<leader>sl', '<cmd>SessionLoadLast<CR>', desc = 'Load last session' },
       { '<leader>ss', '<cmd>Telescope persisted<CR>', desc = 'Search saved sessions' },
       { '<leader>sc', '<cmd>SessionLoad<CR>', desc = 'Load session for cwd' },
@@ -79,13 +81,13 @@ return {
   {
     'rcarriga/nvim-notify',
     init = function()
-        -- Hack otherwise notify complains when I open telescope
-        local notify = require('notify')
-        local hl = vim.api.nvim_get_hl(0, {name='Normal'})
-        notify.setup({ background_colour = string.format('#%06x', hl.bg) }) ---@diagnostic disable-line: undefined-field
-        vim.notify = notify
+      -- Hack otherwise notify complains when I open telescope
+      local notify = require('notify')
+      local hl = vim.api.nvim_get_hl(0, { name = 'Normal' })
+      notify.setup { background_colour = string.format('#%06x', hl.bg) } ---@diagnostic disable-line: undefined-field
+      vim.notify = notify
     end,
-    },
+  },
   {
     'akinsho/toggleterm.nvim',
     cmd = 'ToggleTerm',

@@ -1,4 +1,3 @@
-
 return {
   {
     'rcarriga/nvim-dap-ui',
@@ -41,6 +40,7 @@ return {
       },
       ensure_installed = { 'codelldb' },
     },
+    init = function() require('which-key').add { '<leader>p', group = 'Debug' } end,
     keys = {
       { '<leader>pb', '<cmd> DapToggleBreakpoint <CR>' },
       { '<leader>pr', '<cmd> DapContinue <CR>' },

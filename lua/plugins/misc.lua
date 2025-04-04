@@ -1,6 +1,9 @@
 return {
-  -- Sane buffer close
   {
+    'folke/which-key.nvim',
+  },
+  {
+    -- Sane buffer close
     'mhinz/vim-sayonara',
     keys = {
       --{ '<leader>x', [[<cmd>x!<cr>]] },

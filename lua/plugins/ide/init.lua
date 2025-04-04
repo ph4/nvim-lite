@@ -1,1 +1,1 @@
-return {{import = 'plugins.ide'}}
+return { { import = 'plugins.ide' } }

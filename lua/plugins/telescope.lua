@@ -23,9 +23,9 @@ return {
       tele.load_extension('fzy_native')
       tele.load_extension('frecency')
 
-      local frecency = function ()
+      local frecency = function()
         tele.extensions.frecency.frecency {
-            workspace = 'CWD',
+          workspace = 'CWD',
         }
       end
 
@@ -54,11 +54,9 @@ return {
         { '<leader>gm', builtins.git_status, desc = 'Modified files' },
         { '<leader>gz', builtins.git_stash, desc = 'Stash' },
 
-        { '<leader>bz', group = 'Buffer' },
+        { '<leader>b', group = 'Buffer' },
         { '<leader>bb', builtins.buffers, desc = 'Buffers' },
         { '<leader>bw', builtins.current_buffer_fuzzy_find, desc = 'Grep string' },
-
-        { '<leader>l', group = 'LSP' },
       }
 
       require('which-key').add(mappings, { mode = 'n' })
