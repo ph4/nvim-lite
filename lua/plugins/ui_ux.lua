@@ -80,22 +80,31 @@ return {
     },
   },
   {
-    'rcarriga/nvim-notify',
-    init = function()
-      -- Hack otherwise notify complains when I open telescope
-      local notify = require('notify')
-      local hl = vim.api.nvim_get_hl(0, { name = 'Normal' })
-      notify.setup { background_colour = string.format('#%06x', hl.bg) } ---@diagnostic disable-line: undefined-field
-      vim.notify = notify
-    end,
-  },
-  {
     'akinsho/toggleterm.nvim',
     cmd = 'ToggleTerm',
     keys = { { '<leader><cr>', [[<Cmd>execute v:count . "ToggleTerm"<CR>]], mode = 'n', desc = 'Toggle terminal' } },
     opts = {
       shell = vim.fn.has('win32') == 1 and 'powershell' or nil,
       direction = 'horizontal',
+    },
+  },
+  {
+    'j-hui/fidget.nvim',
+    -- use init so notifications from other plugins work
+    init = function(_, opts)
+      local fidget = require('fidget')
+      fidget.setup(opts)
+    end,
+
+    opts = {
+      progress = {
+        display = {
+          progress_icon = {'dots_negative'},
+        },
+      },
+      notification = {
+        override_vim_notify = true,
+      }
     },
   },
 }
