@@ -1,4 +1,12 @@
 return {
+  icons = {
+    diagnostics = {
+      Error = '󰅚',
+      Warn = '󰀪',
+      Info = '󰋽',
+      Hint = '󰌶',
+    },
+  },
   { 'Aliqyan-21/darkvoid.nvim' },
   {
     'zenbones-theme/zenbones.nvim',
@@ -106,5 +114,56 @@ return {
         override_vim_notify = true,
       }
     },
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      sign_priority = 100,
+      current_line_blame = true,
+      on_attach = function(bufnr)
+        local gs = require('gitsigns')
+        local function map(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+        end
+
+        -- Navigation
+        map('n', ']c', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() gs.nav_hunk('next') end)
+          return '<Ignore>'
+        end, 'Next Git hunk')
+
+        map('n', '[c', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() gs.nav_hunk('prev') end)
+          return '<Ignore>'
+        end, 'Previous Git hunk')
+
+        -- Actions
+        require('which-key').add {}
+        local wk = require('which-key')
+        local icons = {
+          git = {
+            stage = '',
+            diff = '',
+            unstage = '',
+            blame = '',
+            preview = '',
+            reset = '󰜰',
+          }
+        }
+        wk.add {
+          {'<leader>h', group = 'Git hunks'},
+          { '<leader>hs', gs.stage_hunk, desc = 'Stage Hunk', icon = icons.git.stage },
+          { '<leader>hu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = icons.git.unstage },
+          { '<leader>hr', gs.reset_hunk, desc = 'Reset Hunk', icon = icons.git.reset },
+          { '<leader>hp', gs.preview_hunk, desc = 'Preview Hunk', icon = icons.git.preview },
+          { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = icons.git.blame },
+          { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = icons.git.diff },
+          { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = icons.git.diff },
+          bufnr = bufnr
+        }
+      end,
+    }
   },
 }

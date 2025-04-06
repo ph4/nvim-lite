@@ -11,7 +11,7 @@ opt.undofile = true
 opt.backup = false
 opt.writebackup = false
 
-opt.signcolumn = 'auto:1-2'
+opt.signcolumn = 'yes:2'
 opt.clipboard = 'unnamedplus'
 
 opt.wrap = false
@@ -32,3 +32,5 @@ opt.scrolloff = 5
 opt.cursorline = true
 
 opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+
+vim.api.nvim_set_hl(0, 'CursorLineSign', { link = 'CursorLine' })

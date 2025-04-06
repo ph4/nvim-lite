@@ -15,6 +15,13 @@ return {
       'williamboman/mason-lspconfig.nvim',
     },
     config = function()
+      -- Set signs for diagnostics
+      for name, icon in pairs(require('plugins.ui_ux').icons.diagnostics) do
+        name = 'DiagnosticSign' .. name
+        print(name, icon)
+        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
+      end
+
       local lspconfig = require('lspconfig')
       require('mason-lspconfig').setup_handlers {
         function(server_name) lspconfig[server_name].setup {} end,

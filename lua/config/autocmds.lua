@@ -41,3 +41,13 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h', 'hpp' },
   callback = function() vim.bo.commentstring = '// %s' end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "lua",
+  callback = function()
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.softtabstop = 2
+    vim.bo.expandtab = true  -- Ensure spaces are used for indentation
+  end,
+})
