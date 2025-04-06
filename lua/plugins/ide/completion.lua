@@ -16,7 +16,6 @@ return {
       local lspkind = require('lspkind')
       return {
         sources = cmp.config.sources {
-          { name = 'codeium' },
           { name = 'nvim_lua' },
           { name = 'nvim_lsp' },
           { name = 'luasnip', keyword_length = 2, priority = 50 },
@@ -57,28 +56,27 @@ return {
               fallback()
             end
           end),
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.confirm {
-                behavior = cmp.ConfirmBehavior.Insert,
-                select = true,
-              }
-            elseif luasnip.expandable() then
-              luasnip.expand {}
-            else
-              fallback()
-            end
-          end),
         },
       }
     end,
   },
   {
-    'Exafunction/codeium.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'hrsh7th/nvim-cmp',
-    },
-    config = function() require('codeium').setup {} end,
+    'supermaven-inc/supermaven-nvim',
+    event = 'InsertEnter',
+    config = function(_, opts)
+      local supermaven = require('supermaven-nvim')
+      local preview = require('supermaven-nvim.completion_preview')
+      supermaven.setup(opts)
+      preview.suggestion_group = 'SupermavenSuggestion'
+      -- NvimLightCyan darkened & desaturated https://hslpicker.com/#4d7372
+      vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#4d7372', italic = true })
+    end,
+    opts = {
+      keymaps = {
+        accept_suggestion = '<Tab>',
+        clear_suggestion = '<C-]>',
+        accept_word = '<S-Tab>',
+      },
+    }
   },
 }
