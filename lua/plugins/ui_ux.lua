@@ -32,6 +32,7 @@ return {
       '/tmp/',
       '/var/tmp',
     },
+    lazy = false,
     init = function() require('which-key').add { '<leader>s', group = 'Sessions' } end,
     keys = {
 
