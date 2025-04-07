@@ -34,3 +34,5 @@ opt.cursorline = true
 opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
 vim.api.nvim_set_hl(0, 'CursorLineSign', { link = 'CursorLine' })
+
+opt.laststatus = 3

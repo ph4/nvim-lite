@@ -168,7 +168,6 @@ return {
       end,
     }
   },
-
   {
     'tzachar/highlight-undo.nvim',
     opts = {
@@ -180,5 +179,93 @@ return {
       -- to nil will mean no default os called.
       -- ignore_cb = nil,
     },
-  }
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
+    opts = {
+      options = {
+        icons_enabled = true,
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+      },
+      sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'diagnostics'},
+        lualine_c = { },
+        lualine_x = { 'branch', 'diff'},
+        lualine_y = { 'encoding', 'fileformat', 'filetype' },
+        lualine_z = { 'location' },
+      },
+    },
+  },
+  {
+    -- Stolen from https://github.com/Saghen/nvim/blob/main/lua/core/ui.lua
+    'b0o/incline.nvim',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    event = 'VeryLazy',
+    opts = {
+      window = {
+        padding = 0,
+        margin = { horizontal = 0 },
+      },
+      render = function(props)
+        local devicons = require('nvim-web-devicons')
+        -- Modified icon
+        local modified = vim.bo[props.buf].modified
+        local modified_component = modified and { ' ●', group = 'BufferCurrentMod' } or ''
+
+        -- Diagnostics
+        local min_level = tonumber(vim.diagnostic.severity.WARN)
+        local diagnostic_level = 999
+        local diagnostic_count = 0
+        for _, diagnostic in ipairs(vim.diagnostic.get(props.buf)) do
+          local new = tonumber(diagnostic.severity)
+          if new and new <= min_level then
+            if new < diagnostic_level then
+              diagnostic_count = 1
+              diagnostic_level = new
+            else
+              diagnostic_count = diagnostic_count + 1
+            end
+          end
+        end
+
+        local diagnostic_icon = nil
+        -- print('Total Count: ' .. diagnostic_count, 'Level: ' .. diagnostic_level)
+        if (diagnostic_count > 0) then
+          local severity_name = vim.diagnostic.severity[diagnostic_level]
+          severity_name = string.lower(severity_name)
+          --make first letter uppercase
+          severity_name = string.upper(string.sub(severity_name, 1, 1)) .. string.sub(severity_name, 2)
+          diagnostic_icon = vim.fn.sign_getdefined('DiagnosticSign' .. severity_name)[1]
+        end
+
+        local diagnostic_component = diagnostic_icon
+        and {' ' .. diagnostic_icon.text .. diagnostic_count , group = diagnostic_icon.texthl}
+        or ''
+
+        -- Filename
+        local buf_path = vim.api.nvim_buf_get_name(props.buf)
+        local dirname = vim.fn.fnamemodify(buf_path, ':~:.:h')
+        local dirname_component = { dirname, group = 'Comment' }
+
+        local filename = vim.fn.fnamemodify(buf_path, ':t')
+        if filename == '' then
+          filename = '[No Name]'
+        end
+        local filename_component = { filename, group = 'Normal' }
+
+        return {
+          modified_component,
+          diagnostic_component,
+          ' ',
+          filename_component,
+          ' ',
+          dirname_component,
+          ' ',
+        }
+      end,
+    },
+  },
 }
