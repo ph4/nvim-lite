@@ -64,12 +64,18 @@ return {
     'supermaven-inc/supermaven-nvim',
     event = 'InsertEnter',
     config = function(_, opts)
+      local function set_highlights(...) ---@diagnostic disable-line: unused-vararg
+        -- NvimLightCyan darkened & desaturated https://hslpicker.com/#4d7372
+        -- vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#4d7372', italic = true })
+        vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#3d6b6a', italic = true })
+      end
+
+      vim.api.nvim_create_autocmd("ColorScheme", { pattern = '*', callback = set_highlights })
+      set_highlights()
       local supermaven = require('supermaven-nvim')
       local preview = require('supermaven-nvim.completion_preview')
       supermaven.setup(opts)
-      preview.suggestion_group = 'SupermavenSuggestion'
-      -- NvimLightCyan darkened & desaturated https://hslpicker.com/#4d7372
-      vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#4d7372', italic = true })
+      preview.suggestion_group = 'SupermavenSuggestion' -- Works with zenbones
     end,
     opts = {
       keymaps = {

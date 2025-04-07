@@ -9,5 +9,6 @@ require('config.lazy')
 require('config.keymaps')
 require('config.autocmds')
 
-vim.cmd([[colorscheme darkvoid]])
+vim.cmd([[set background=light]])
+vim.cmd([[colorscheme zenbones]])
 vim.cmd([[language en_US]])
