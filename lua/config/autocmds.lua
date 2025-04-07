@@ -51,3 +51,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo.expandtab = true  -- Ensure spaces are used for indentation
   end,
 })
+
+vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
+    vim.highlight.on_yank {higroup = "IncSearch", timeout = 300}
+  end,
+})
