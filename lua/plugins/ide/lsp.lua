@@ -18,7 +18,6 @@ return {
       -- Set signs for diagnostics
       for name, icon in pairs(require('plugins.ui_ux').icons.diagnostics) do
         name = 'DiagnosticSign' .. name
-        print(name, icon)
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
       end
 
