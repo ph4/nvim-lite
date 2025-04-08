@@ -16,10 +16,9 @@ return {
     },
     config = function()
       -- Set signs for diagnostics
-      for name, icon in pairs(require('plugins.ui_ux').icons.diagnostics) do
-        name = 'DiagnosticSign' .. name
-        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
-      end
+      vim.diagnostic.config({
+        signs = { text = require('config.icons').diagnostics }
+      })
 
       local lspconfig = require('lspconfig')
       require('mason-lspconfig').setup_handlers {

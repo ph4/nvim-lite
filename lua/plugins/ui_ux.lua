@@ -1,12 +1,5 @@
+local icons = require('config.icons')
 return {
-  icons = {
-    diagnostics = {
-      Error = '󰅚',
-      Warn = '󰀪',
-      Info = '󰋽',
-      Hint = '󰌶',
-    },
-  },
   { 'Aliqyan-21/darkvoid.nvim' },
   {
     'zenbones-theme/zenbones.nvim',
@@ -87,6 +80,18 @@ return {
       window = {
         width = 32,
       },
+      default_component_configs = {
+        diagnostics = {
+          errors_only = true,
+        },
+        modified = {
+          symbol = icons.modified,
+        },
+        git_status = {
+          symbols = icons.git.status,
+          align = "right",
+        },
+      },
     },
   },
   {
@@ -144,25 +149,16 @@ return {
         -- Actions
         require('which-key').add {}
         local wk = require('which-key')
-        local icons = {
-          git = {
-            stage = '',
-            diff = '',
-            unstage = '',
-            blame = '',
-            preview = '',
-            reset = '󰜰',
-          }
-        }
+        local git = icons.git.actions
         wk.add {
           {'<leader>h', group = 'Git hunks'},
-          { '<leader>hs', gs.stage_hunk, desc = 'Stage Hunk', icon = icons.git.stage },
-          { '<leader>hu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = icons.git.unstage },
-          { '<leader>hr', gs.reset_hunk, desc = 'Reset Hunk', icon = icons.git.reset },
-          { '<leader>hp', gs.preview_hunk, desc = 'Preview Hunk', icon = icons.git.preview },
-          { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = icons.git.blame },
-          { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = icons.git.diff },
-          { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = icons.git.diff },
+          { '<leader>hs', gs.stage_hunk, desc = 'Stage Hunk', icon = git.stage },
+          { '<leader>hu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = git.unstage },
+          { '<leader>hr', gs.reset_hunk, desc = 'Reset Hunk', icon = git.reset },
+          { '<leader>hp', gs.preview_hunk, desc = 'Preview Hunk', icon = git.preview },
+          { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
+          { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = git.diff },
+          { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
           bufnr = bufnr
         }
       end,
