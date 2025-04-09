@@ -38,7 +38,6 @@ return {
     lazy = false,
     init = function() require('which-key').add { '<leader>s', group = 'Sessions' } end,
     keys = {
-
       { '<leader>sl', '<cmd>SessionLoadLast<CR>', desc = 'Load last session' },
       { '<leader>ss', '<cmd>Telescope persisted<CR>', desc = 'Search saved sessions' },
       { '<leader>sc', '<cmd>SessionLoad<CR>', desc = 'Load session for cwd' },
@@ -124,6 +123,7 @@ return {
   },
   {
     'lewis6991/gitsigns.nvim',
+    event = 'BufRead',
     opts = {
       sign_priority = 100,
       current_line_blame = true,

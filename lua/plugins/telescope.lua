@@ -1,6 +1,7 @@
 return {
   {
     'nvim-telescope/telescope.nvim',
+    event = 'VeryLazy',
     tag = '0.1.8',
     dependencies = {
       'folke/which-key.nvim', -- to bind stuff
@@ -61,5 +62,10 @@ return {
 
       require('which-key').add(mappings, { mode = 'n' })
     end,
+    keys = {
+      { '<leader>f' },
+      { '<leader>/' },
+      { '<leader><leader>' },
+    }
   },
 }
