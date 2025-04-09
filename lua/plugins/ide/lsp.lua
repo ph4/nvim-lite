@@ -13,7 +13,7 @@ return {
       })
 
       require('mason-lspconfig').setup_handlers {
-        function(server_name) vim.lsp.enable(server_name) {} end,
+        function(server_name) vim.lsp.enable(server_name) end,
       }
     end,
   },
