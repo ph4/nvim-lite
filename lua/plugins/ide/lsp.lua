@@ -3,6 +3,7 @@ return {
     "zk-org/zk-nvim",
     event = "VeryLazy",
     config = function ()
+      local commands = require("zk.commands")
       require("zk").setup {
         picker = 'telescope',
         picker_options = {
@@ -19,6 +20,28 @@ return {
           },
         },
       }
+      local wk = require("which-key")
+      local normal = {
+        {'<leader>z', group = 'zk'},
+        {'<leader>zno', commands.get('ZkNotes'), desc = 'Notes'},
+        {'<leader>zne', commands.get('ZkNew'), desc = 'New note'},
+        {'<leader>zl', commands.get('ZkLinks'), desc = 'Links'},
+        {'<leader>zbl', commands.get('ZkBacklinks'), desc = 'Backlinks'},
+        {'<leader>zbb', commands.get('ZkBuffers'), desc = 'Buffers'},
+        {'<leader>zt', commands.get('ZkTags'), desc = 'Tags'},
+        {'<leader>zi', commands.get('ZkInsertLink'), desc = 'Insert link'},
+        mode = 'n',
+      }
+      local visual = {
+        {'<leader>z', group = 'zk'},
+        {'<leader>zc', commands.get('ZkNewFromContentSelection'), desc = 'New note from content selection'},
+        {'<leader>zt', commands.get('ZkNewFromTitleSelection'), desc = 'New note from title selection'},
+        {'<leader>zi', commands.get('ZkInsertLinkAtSelection'), desc = 'Insert link at selection'},
+        {'<leader>zm', commands.get('ZkMatch'), desc = 'Match note (from selection)'},
+        mode = 'v',
+      }
+      wk.add(normal)
+      wk.add(visual)
     end
   },
   {
