@@ -26,15 +26,12 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('User', {
   pattern = 'PersistedSavePre',
   callback = function()
-      require('neo-tree').close_all()
-      local ui = require('toggleterm.ui')
-      local has_open, windows = ui.find_open_windows()
-      if has_open then
-          ui.close_and_save_terminal_view(windows)
-      end
+    require('neo-tree').close_all()
+    local ui = require('toggleterm.ui')
+    local has_open, windows = ui.find_open_windows()
+    if has_open then ui.close_and_save_terminal_view(windows) end
   end,
 })
-
 
 -- Set commentstring for C/C++ files
 vim.api.nvim_create_autocmd('FileType', {
@@ -42,17 +39,17 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function() vim.bo.commentstring = '// %s' end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "lua",
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'lua',
   callback = function()
     vim.bo.shiftwidth = 2
     vim.bo.tabstop = 2
     vim.bo.softtabstop = 2
-    vim.bo.expandtab = true  -- Ensure spaces are used for indentation
+    vim.bo.expandtab = true -- Ensure spaces are used for indentation
   end,
 })
 
-vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
-    vim.highlight.on_yank {higroup = "IncSearch", timeout = 300}
-  end,
-})
+vim.api.nvim_create_autocmd(
+  'TextYankPost',
+  { callback = function() vim.highlight.on_yank { higroup = 'IncSearch', timeout = 300 } end }
+)

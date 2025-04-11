@@ -66,6 +66,6 @@ return {
       { '<leader>f' },
       { '<leader>/' },
       { '<leader><leader>' },
-    }
+    },
   },
 }

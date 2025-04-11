@@ -31,15 +31,15 @@ nmap('<C-l>', '<C-w>l', 'Move to the right split')
 tmap('<Esc>', [[<C-\><C-n>]], 'Exit terminal mode')
 local esc_mapped = true
 local function toggle_esc()
-    if esc_mapped then
-        vim.api.nvim_del_keymap('t', '<Esc>')
-        esc_mapped = false
-        print('ESC umapped')
-    else
-        tmap('<Esc>', [[<C-\><C-n>]], 'Exit terminal mode')
-        esc_mapped = true
-        print('ESC mapped')
-    end
+  if esc_mapped then
+    vim.api.nvim_del_keymap('t', '<Esc>')
+    esc_mapped = false
+    print('ESC umapped')
+  else
+    tmap('<Esc>', [[<C-\><C-n>]], 'Exit terminal mode')
+    esc_mapped = true
+    print('ESC mapped')
+  end
 end
 tmap([[<C-\><C-t>]], toggle_esc, 'Toggle esc to exit terminal mode')
 nmap([[<C-\><C-t>]], toggle_esc, 'Toggle esc to exit terminal mode')

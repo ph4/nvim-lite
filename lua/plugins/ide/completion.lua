@@ -68,10 +68,10 @@ return {
       local function set_highlights(...) ---@diagnostic disable-line: unused-vararg
         -- NvimLightCyan darkened & desaturated https://hslpicker.com/#4d7372
         -- vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#4d7372', italic = true })
-        vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg='#3d6b6a', italic = true })
+        vim.api.nvim_set_hl(0, 'SupermavenSuggestion', { fg = '#3d6b6a', italic = true })
       end
 
-      vim.api.nvim_create_autocmd("ColorScheme", { pattern = '*', callback = set_highlights })
+      vim.api.nvim_create_autocmd('ColorScheme', { pattern = '*', callback = set_highlights })
       set_highlights()
       local supermaven = require('supermaven-nvim')
       local preview = require('supermaven-nvim.completion_preview')
@@ -84,6 +84,6 @@ return {
         clear_suggestion = '<C-]>',
         accept_word = '<S-Tab>',
       },
-    }
+    },
   },
 }

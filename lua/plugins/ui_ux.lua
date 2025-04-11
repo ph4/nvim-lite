@@ -88,7 +88,7 @@ return {
         },
         git_status = {
           symbols = icons.git.status,
-          align = "right",
+          align = 'right',
         },
       },
     },
@@ -113,12 +113,12 @@ return {
     opts = {
       progress = {
         display = {
-          progress_icon = {'dots_negative'},
+          progress_icon = { 'dots_negative' },
         },
       },
       notification = {
         override_vim_notify = true,
-      }
+      },
     },
   },
   {
@@ -129,9 +129,7 @@ return {
       current_line_blame = true,
       on_attach = function(bufnr)
         local gs = require('gitsigns')
-        local function map(mode, lhs, rhs, desc)
-          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
-        end
+        local function map(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc }) end
 
         -- Navigation
         map('n', ']c', function()
@@ -151,7 +149,7 @@ return {
         local wk = require('which-key')
         local git = icons.git.actions
         wk.add {
-          {'<leader>h', group = 'Git hunks'},
+          { '<leader>h', group = 'Git hunks' },
           { '<leader>hs', gs.stage_hunk, desc = 'Stage Hunk', icon = git.stage },
           { '<leader>hu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = git.unstage },
           { '<leader>hr', gs.reset_hunk, desc = 'Reset Hunk', icon = git.reset },
@@ -159,18 +157,18 @@ return {
           { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
           { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = git.diff },
           { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
-          bufnr = bufnr
+          bufnr = bufnr,
         }
       end,
-    }
+    },
   },
   {
     'tzachar/highlight-undo.nvim',
     opts = {
-      hlgroup = "HighlightUndo",
+      hlgroup = 'HighlightUndo',
       duration = 300,
-      pattern = {"*"},
-      ignored_filetypes = { "neo-tree", "fugitive", "TelescopePrompt", "mason", "lazy" },
+      pattern = { '*' },
+      ignored_filetypes = { 'neo-tree', 'fugitive', 'TelescopePrompt', 'mason', 'lazy' },
       -- ignore_cb is in comma as there is a default implementation. Setting
       -- to nil will mean no default os called.
       -- ignore_cb = nil,
@@ -187,9 +185,9 @@ return {
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'diagnostics'},
-        lualine_c = { },
-        lualine_x = { 'branch', 'diff'},
+        lualine_b = { 'diagnostics' },
+        lualine_c = {},
+        lualine_x = { 'branch', 'diff' },
         lualine_y = { 'encoding', 'fileformat', 'filetype' },
         lualine_z = { 'location' },
       },
@@ -229,7 +227,7 @@ return {
 
         local diagnostic_icon = nil
         -- print('Total Count: ' .. diagnostic_count, 'Level: ' .. diagnostic_level)
-        if (diagnostic_count > 0) then
+        if diagnostic_count > 0 then
           local severity_name = vim.diagnostic.severity[diagnostic_level]
           severity_name = string.lower(severity_name)
           --make first letter uppercase
@@ -238,8 +236,8 @@ return {
         end
 
         local diagnostic_component = diagnostic_icon
-        and {' ' .. diagnostic_icon.text .. diagnostic_count , group = diagnostic_icon.texthl}
-        or ''
+            and { ' ' .. diagnostic_icon.text .. diagnostic_count, group = diagnostic_icon.texthl }
+          or ''
 
         -- Filename
         local buf_path = vim.api.nvim_buf_get_name(props.buf)
@@ -247,9 +245,7 @@ return {
         local dirname_component = { dirname, group = 'Comment' }
 
         local filename = vim.fn.fnamemodify(buf_path, ':t')
-        if filename == '' then
-          filename = '[No Name]'
-        end
+        if filename == '' then filename = '[No Name]' end
         local filename_component = { filename, group = 'Normal' }
 
         return {

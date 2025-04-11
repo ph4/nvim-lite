@@ -19,16 +19,16 @@ return {
     },
     status = {
       -- Change type
-      added     = '',
-      deleted   = '',
-      modified  = '',
-      renamed   = '',
+      added = '',
+      deleted = '',
+      modified = '',
+      renamed = '',
       -- Status type
       untracked = '',
-      ignored   = '',
-      unstaged  = '󰄱',
-      staged    = '',
-      conflict  = '',
+      ignored = '',
+      unstaged = '󰄱',
+      staged = '',
+      conflict = '',
     },
   },
 }
