@@ -30,7 +30,7 @@ _H_ ^ ^ _L_  _<C-h>_: ◄, _<C-j>_: ▼
           color = 'pink',
           invoke_on_body = true,
           on_enter = function() vim.wo.virtualedit = 'all' end,
-          on_exit = function() vim.wo.virtualedit = '' end,
+          on_exit = function() vim.wo.virtualedit = 'block' end,
         },
         mode = 'n',
         body = '<leader>ve',
