@@ -49,4 +49,9 @@ _H_ ^ ^ _L_  _<C-h>_: ◄, _<C-j>_: ▼
       }
     end,
   },
+  {
+    'echasnovski/mini.move',
+    event = 'VeryLazy',
+    opts = {},
+  },
 }
