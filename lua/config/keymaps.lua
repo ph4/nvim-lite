@@ -78,6 +78,7 @@ nmap('<leader>a', vim.lsp.buf.code_action, 'Code action')
 if wk then whichkey.add { '<leader>l', group = '+LSP' } end
 nmap('<leader>ld', vim.diagnostic.setloclist, 'Document diagnostics')
 nmap('<leader>lc', vim.lsp.codelens.run, 'Run code lens')
+nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
 nmap('<leader>lt', vim.lsp.buf.type_definition, 'Go to type definition')
 nmap('<leader>lr', vim.lsp.buf.rename, 'Rename symbol')
 nmap('<leader>lf', function() vim.lsp.buf.format { async = true } end, 'Format file')

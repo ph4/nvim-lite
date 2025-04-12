@@ -48,6 +48,7 @@ return {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     dependencies = {
+      { 'https://git.sr.ht/~p00f/clangd_extensions.nvim' },
       {
         'williamboman/mason.nvim',
         opts = {
@@ -66,6 +67,24 @@ return {
 
       require('mason-lspconfig').setup_handlers {
         function(server_name) vim.lsp.enable(server_name) end,
+        ['clangd'] = function()
+          local wk = require('which-key')
+          require('clangd_extensions').setup {}
+          vim.lsp.enable('clangd')
+
+          local devicons = require('nvim-web-devicons')
+          local icon = devicons.get_icon('c', nil, { default = true })
+          local mappings = {
+            {'<leader>j', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
+            {'<leader>ls', '<cmd>ClangdSymbolInfo<cr>>', desc = 'Show symbol info', icon = icon },
+            {'<leader>lt', '<cmd>ClangdTypeHierarchy<cr>', desc = 'Show type hierarchy', icon = icon },
+          }
+          vim.lsp.config('clangd', {
+            on_attach =  function(_, bufnr)
+              wk.add(mappings, { buffer = bufnr })
+            end
+          })
+        end,
       }
     end,
   },
