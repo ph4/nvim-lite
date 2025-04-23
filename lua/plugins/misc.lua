@@ -17,4 +17,9 @@ return {
       --vim.g.sayonara_confirm_quit = 1
     end,
   },
+  {
+    'klen/nvim-config-local',
+    lazy = false,
+    config = true,
+  }
 }
