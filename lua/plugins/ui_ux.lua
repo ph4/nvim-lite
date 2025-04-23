@@ -72,7 +72,7 @@ return {
       },
     },
     keys = {
-      { '<leader>e', '<CMD>Neotree toggle<CR>', desc = 'NeoTree' },
+      { '-', '<CMD>Neotree toggle<CR>', desc = 'NeoTree' },
     },
     config = {
       use_libuv_file_watcher = true,
