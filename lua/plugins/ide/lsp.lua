@@ -75,14 +75,12 @@ return {
           local devicons = require('nvim-web-devicons')
           local icon = devicons.get_icon('c', nil, { default = true })
           local mappings = {
-            {'<leader>j', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
-            {'<leader>ls', '<cmd>ClangdSymbolInfo<cr>>', desc = 'Show symbol info', icon = icon },
-            {'<leader>lt', '<cmd>ClangdTypeHierarchy<cr>', desc = 'Show type hierarchy', icon = icon },
+            { '<leader>j', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
+            { '<leader>ls', '<cmd>ClangdSymbolInfo<cr>>', desc = 'Show symbol info', icon = icon },
+            { '<leader>lt', '<cmd>ClangdTypeHierarchy<cr>', desc = 'Show type hierarchy', icon = icon },
           }
           vim.lsp.config('clangd', {
-            on_attach =  function(_, bufnr)
-              wk.add(mappings, { buffer = bufnr })
-            end
+            on_attach = function(_, bufnr) wk.add(mappings, { buffer = bufnr }) end,
           })
         end,
       }

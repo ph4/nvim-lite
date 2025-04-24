@@ -21,5 +21,5 @@ return {
     'klen/nvim-config-local',
     lazy = false,
     config = true,
-  }
+  },
 }

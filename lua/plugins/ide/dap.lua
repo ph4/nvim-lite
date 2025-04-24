@@ -1,13 +1,13 @@
 ---@param config {args?:string[]|fun():string[]?}
 local function get_args(config)
-    local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
-    config = vim.deepcopy(config)
-    ---@cast args string[]
-    config.args = function()
-        local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
-        return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
-    end
-    return config
+  local args = type(config.args) == 'function' and (config.args() or {}) or config.args or {}
+  config = vim.deepcopy(config)
+  ---@cast args string[]
+  config.args = function()
+    local new_args = vim.fn.input('Run with args: ', table.concat(args, ' ')) --[[@as string]]
+    return vim.split(vim.fn.expand(new_args) --[[@as string]], ' ')
+  end
+  return config
 end
 
 return {
@@ -19,7 +19,7 @@ return {
       'nvim-neotest/nvim-nio',
     },
     opts = {
-      icons = { expanded = '', collapsed = '', current_frame = '▶' }
+      icons = { expanded = '', collapsed = '', current_frame = '▶' },
     },
     config = function(_, opts)
       local dap = require('dap')
@@ -44,28 +44,32 @@ return {
       require('mason-nvim-dap').setup(opts)
       require('which-key').add { '<leader>e', group = 'Debug' }
       local Hydra = require('hydra')
-      Hydra({
+      Hydra {
         name = '',
         mode = 'n',
         body = '<leader>e',
         color = 'pink',
         heads = {
-          { 'i', '<cmd> DapStepInto <CR>', {desc = 'Step Into'}},
-          { 'o', '<cmd> DapStepOver <CR>', {desc = 'Step Over'}},
-          { 'O', '<cmd> DapStepOut <CR>', {desc = 'Step Out'}},
+          { 'i', '<cmd> DapStepInto <CR>', { desc = 'Step Into' } },
+          { 'o', '<cmd> DapStepOver <CR>', { desc = 'Step Over' } },
+          { 'O', '<cmd> DapStepOut <CR>', { desc = 'Step Out' } },
         },
-      })
+      }
     end,
     keys = {
       { '<leader>eq', function() require('dapui').close() end },
       { '<leader>et', function() require('dapui').toggle() end },
       { '<leader>eo', function() require('dapui').open() end },
 
-      { '<leader>eb', function() require('dap').toggle_breakpoint() end, desc = "Breakpoint" },
-      { '<leader>eB', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = 'Conditional breakpoint' },
+      { '<leader>eb', function() require('dap').toggle_breakpoint() end, desc = 'Breakpoint' },
+      {
+        '<leader>eB',
+        function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
+        desc = 'Conditional breakpoint',
+      },
 
-      { '<leader>p', function() require('dap').continue() end, desc = 'DAP Continue'},
-      { '<leader>P', function() require('dap').continue{before = get_args} end, desc = 'DAP Run with Args' },
+      { '<leader>p', function() require('dap').continue() end, desc = 'DAP Continue' },
+      { '<leader>P', function() require('dap').continue { before = get_args } end, desc = 'DAP Run with Args' },
       { '<leader>er', function() require('dap').run_last() end, desc = 'Run Last' },
       { '<leader>ep', function() require('dap').pause() end, desc = 'Pause' },
       { '<leader>ec', function() require('dap').terminate() end, desc = 'Terminate' },
@@ -78,11 +82,10 @@ return {
       { '<leader>eg', function() require('dap').goto_() end, desc = 'Go to line (no execute)' },
 
       { '<leader>ej', function() require('dap').down() end, desc = 'Down' },
-      { '<leader>ek', function() require('dap').up() end, desc = 'Up'},
+      { '<leader>ek', function() require('dap').up() end, desc = 'Up' },
 
       { '<leader>er', function() require('dap').repl.toggle() end, desc = 'Toggle REPL' },
       { '<leader>es', function() require('dap').session() end, desc = 'Session' },
-
     },
   },
 }
