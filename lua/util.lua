@@ -16,7 +16,18 @@ function M.execute_command(name, command)
 
   local term_buf = M.named_terminals[name]
 
-  -- Close old buffer if it exists but job is finished
+  -- Find the window of the terminal buffer
+  local term_win
+  if term_buf then
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_get_buf(win) == term_buf then
+        term_win = win
+        break
+      end
+    end
+  end
+
+  -- Stop the current job if it's still running
   if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
     local chan_id = vim.b[term_buf].terminal_job_id
     local job_still_running = chan_id and vim.fn.jobwait({ chan_id }, 0)[1] == -1
@@ -29,31 +40,40 @@ function M.execute_command(name, command)
         vim.fn.jobstop(chan_id) -- Force stop
       end
     end
+  end
+
+  if term_win then
+    vim.cmd('enew')
     vim.api.nvim_buf_delete(term_buf, { force = true })
-    M.named_terminals[name] = nil
-    term_buf = nil
-  end
-
-  -- Reuse terminal buffer if valid, else create new one
-  if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
-    vim.cmd('botright split')
-    vim.api.nvim_set_current_buf(term_buf)
-  else
-    vim.cmd('botright split | terminal')
     term_buf = vim.api.nvim_get_current_buf()
-    M.named_terminals[name] = term_buf
-
-    -- Optional: Set buffer name for easy identification
-    vim.api.nvim_buf_set_name(term_buf, 'term://' .. name)
+  else
+    vim.cmd('botright new')
+    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
+      vim.api.nvim_buf_delete(term_buf, { force = true })
+    end
+    term_buf = vim.api.nvim_get_current_buf()
+    term_win = vim.api.nvim_get_current_win()
   end
 
-  -- Send the command to the terminal
-  local chan_id = vim.b.terminal_job_id
-  local endline = is_windows and '\r\n' or '\n'
-  vim.fn.chansend(chan_id, command .. endline)
+  M.named_terminals[name] = term_buf
 
-  -- Start in insert mode for terminal interaction
-  vim.cmd('startinsert')
+  vim.api.nvim_buf_call(term_buf, function()
+    vim.fn.jobstart(command, {
+      term = true,
+      height = vim.api.nvim_win_get_height(term_win),
+      width = vim.api.nvim_win_get_width(term_win),
+      on_exit = function(_, code, _)
+        if code == 0 then
+          vim.notify(name .. ' finished successfully', vim.log.levels.INFO)
+        else
+          vim.notify(name .. ' exited with code: ' .. code, vim.log.levels.ERROR)
+        end
+      end,
+    })
+  end)
+
+  -- Set buffer name for easy identification
+  vim.api.nvim_buf_set_name(term_buf, 'term://' .. name)
 end
 
 return M
