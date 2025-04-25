@@ -48,9 +48,7 @@ function M.execute_command(name, command)
     term_buf = vim.api.nvim_get_current_buf()
   else
     vim.cmd('botright new')
-    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
-      vim.api.nvim_buf_delete(term_buf, { force = true })
-    end
+    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then vim.api.nvim_buf_delete(term_buf, { force = true }) end
     term_buf = vim.api.nvim_get_current_buf()
     term_win = vim.api.nvim_get_current_win()
   end

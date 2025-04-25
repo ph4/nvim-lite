@@ -200,11 +200,11 @@ return {
     event = 'VeryLazy',
     opts = {
       window = {
+        zindex = 45, -- below the shade
         padding = 0,
         margin = { horizontal = 0 },
       },
       render = function(props)
-        local devicons = require('nvim-web-devicons')
         -- Modified icon
         local modified = vim.bo[props.buf].modified
         local modified_component = modified and { ' ●', group = 'BufferCurrentMod' } or ''
