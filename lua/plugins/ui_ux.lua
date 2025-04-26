@@ -186,7 +186,7 @@ return {
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'diagnostics' },
-        lualine_c = {},
+        lualine_c = { 'filename', 'navic' },
         lualine_x = { 'branch', 'diff' },
         lualine_y = { 'encoding', 'fileformat', 'filetype' },
         lualine_z = { 'location' },

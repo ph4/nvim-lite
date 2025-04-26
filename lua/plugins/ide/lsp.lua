@@ -49,8 +49,12 @@ return {
     event = 'VeryLazy',
     dependencies = {
       { 'https://git.sr.ht/~p00f/clangd_extensions.nvim' },
+      { 'SmiteshP/nvim-navic' },
       {
         'williamboman/mason.nvim',
+        init = function(_, opts)
+          require('mason').setup(opts)
+        end,
         opts = {
           registries = {
             'github:ph4/mason-registry',
@@ -60,6 +64,14 @@ return {
       { 'williamboman/mason-lspconfig.nvim', config = true },
     },
     config = function()
+      local default_on_attach = function(client, bufnr)
+        if client.server_capabilities.documentSymbolProvider then
+          require('nvim-navic').attach(client, bufnr)
+        end
+      end
+
+      vim.lsp.config('*', {on_attach = default_on_attach})
+
       -- Set signs for diagnostics
       vim.diagnostic.config {
         signs = { text = require('config.icons').diagnostics },
@@ -80,7 +92,10 @@ return {
             { '<leader>lt', '<cmd>ClangdTypeHierarchy<cr>', desc = 'Show type hierarchy', icon = icon },
           }
           vim.lsp.config('clangd', {
-            on_attach = function(_, bufnr) wk.add(mappings, { buffer = bufnr }) end,
+            on_attach = function(_, bufnr)
+              wk.add(mappings, { buffer = bufnr })
+              default_on_attach(_, bufnr)
+            end,
           })
         end,
       }
