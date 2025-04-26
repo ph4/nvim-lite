@@ -23,16 +23,6 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(event) vim.keymap.set('n', '<esc>', '<cmd>close<cr>', { buffer = event.buf, silent = true }) end,
 })
 
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'PersistedSavePre',
-  callback = function()
-    require('neo-tree').close_all()
-    local ui = require('toggleterm.ui')
-    local has_open, windows = ui.find_open_windows()
-    if has_open then ui.close_and_save_terminal_view(windows) end
-  end,
-})
-
 -- Set commentstring for C/C++ files
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h', 'hpp' },

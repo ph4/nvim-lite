@@ -29,18 +29,36 @@ return {
     config = true,
   },
   {
-    'olimorris/persisted.nvim',
-    ignored_dirs = {
-      { '~', exact = true },
-      '/tmp/',
-      '/var/tmp',
-    },
+    "coffebar/neovim-project",
     lazy = false,
-    init = function() require('which-key').add { '<leader>s', group = 'Sessions' } end,
+    priority = 100,
+    opts = {
+      last_session_on_startup = false,
+      projects = { -- define project roots
+        "~/source/repos/*",
+        "~/AppData/Local/nvim",
+        "~/AppData/Local/nvim-data",
+        -- "~/AppData/Local/nvim-data/lazy/*",
+      },
+      picker = { type = "telescope" },
+      session_manager_opts = {
+        autosave_ignore_filetypes = { 'toggleterm' },
+      },
+    },
+    init = function()
+      -- enable saving the state of plugins in the session
+      vim.opt.sessionoptions:append("globals") -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+      require('which-key').add { '<leader>w', group = 'Projects' }
+    end,
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "Shatur/neovim-session-manager" },
+    },
     keys = {
-      { '<leader>sl', '<cmd>SessionLoadLast<CR>', desc = 'Load last session' },
-      { '<leader>ss', '<cmd>Telescope persisted<CR>', desc = 'Search saved sessions' },
-      { '<leader>sc', '<cmd>SessionLoad<CR>', desc = 'Load session for cwd' },
+      { '<leader>ww', '<cmd>NeovimProjectDiscover<CR>', desc = 'Select project from history' },
+      { '<leader>wh', '<cmd>NeovimProjectHistory<CR>', desc = 'Select project from history' },
+      { '<leader>wl', '<cmd>NeovimProjectLoadRecent<CR>', desc = 'Load last project' },
+      { '<leader>wc', '<cmd>NeovimProjectLoad .<CR>', desc = 'Load session for cwd' },
     },
   },
   {
