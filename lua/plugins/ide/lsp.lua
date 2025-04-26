@@ -70,15 +70,37 @@ return {
         end
       end
 
-      vim.lsp.config('*', {on_attach = default_on_attach})
-
       -- Set signs for diagnostics
       vim.diagnostic.config {
         signs = { text = require('config.icons').diagnostics },
       }
 
+      local function add_on_attach(server_name, fun)
+        local old_on_attach = vim.lsp[server_name] and vim.lsp[server_name].on_attach
+        vim.lsp.config(server_name, {
+          on_attach = function(client, bufnr)
+            if old_on_attach then old_on_attach(client, bufnr) end
+            fun(client, bufnr)
+          end,
+        })
+      end
+
       require('mason-lspconfig').setup_handlers {
-        function(server_name) vim.lsp.enable(server_name) end,
+        function(server_name)
+          add_on_attach(server_name, default_on_attach)
+          vim.lsp.enable(server_name)
+        end,
+        ['basedpyright'] = function()
+          local wk = require('which-key')
+          local mappings = {
+            { '<leader>loi', '<cmd>LspPyrightOrganizeImports<cr>', desc = 'Organize imports', icon = '' },
+            { '<leader>lspp', '<cmd>LspPyrightSetPythonPath<cr>', desc = 'Set python path', icon = '' },
+          }
+          add_on_attach('basedpyright', function(_, bufnr)
+            wk.add(mappings, { buffer = bufnr })
+          end)
+          vim.lsp.enable('basedpyright')
+        end,
         ['clangd'] = function()
           local wk = require('which-key')
           require('clangd_extensions').setup {}

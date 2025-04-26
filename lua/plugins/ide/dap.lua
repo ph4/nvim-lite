@@ -15,16 +15,22 @@ return {
     'rcarriga/nvim-dap-ui',
     event = 'VeryLazy',
     dependencies = {
+      "theHamsta/nvim-dap-virtual-text", -- help to find variable definitions in debug mode
       'mfussenegger/nvim-dap',
       'nvim-neotest/nvim-nio',
+      "mfussenegger/nvim-dap-python",
     },
     opts = {
       icons = { expanded = '', collapsed = '', current_frame = '▶' },
     },
     config = function(_, opts)
       local dap = require('dap')
+
+      require('dap-python').setup("python")
+      require('nvim-dap-virtual-text').setup()
       local dapui = require('dapui')
       dapui.setup(opts)
+
       dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
     end,
   },
