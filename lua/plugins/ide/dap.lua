@@ -15,10 +15,8 @@ return {
     'rcarriga/nvim-dap-ui',
     event = 'VeryLazy',
     dependencies = {
-      "theHamsta/nvim-dap-virtual-text", -- help to find variable definitions in debug mode
       'mfussenegger/nvim-dap',
       'nvim-neotest/nvim-nio',
-      "mfussenegger/nvim-dap-python",
     },
     opts = {
       icons = { expanded = '', collapsed = '', current_frame = '▶' },
@@ -26,8 +24,6 @@ return {
     config = function(_, opts)
       local dap = require('dap')
 
-      require('dap-python').setup("python")
-      require('nvim-dap-virtual-text').setup()
       local dapui = require('dapui')
       dapui.setup(opts)
 
@@ -40,14 +36,26 @@ return {
     dependencies = {
       'williamboman/mason.nvim',
       'mfussenegger/nvim-dap',
+      'mfussenegger/nvim-dap-python',
+      'theHamsta/nvim-dap-virtual-text', -- help to find variable definitions in debug mode
       'nvimtools/hydra.nvim',
     },
     opts = {
-      handlers = {},
-      ensure_installed = { 'codelldb' },
+      handlers = {
+        function (config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+        python = function(_)
+          local debugpy_path = require('mason-registry').get_package('debugpy'):get_install_path()
+          local python_path = debugpy_path .. '/venv/Scripts/python'
+          require('dap-python').setup(python_path)
+        end
+      },
+      ensure_installed = { 'codelldb', 'debugpy' },
     },
     config = function(_, opts)
       require('mason-nvim-dap').setup(opts)
+      require('nvim-dap-virtual-text').setup({})
       require('which-key').add { '<leader>e', group = 'Debug' }
       local Hydra = require('hydra')
       Hydra {
