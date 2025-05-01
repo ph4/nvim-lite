@@ -52,9 +52,7 @@ return {
       { 'SmiteshP/nvim-navic' },
       {
         'williamboman/mason.nvim',
-        init = function(_, opts)
-          require('mason').setup(opts)
-        end,
+        init = function(_, opts) require('mason').setup(opts) end,
         opts = {
           registries = {
             'github:ph4/mason-registry',
@@ -65,9 +63,7 @@ return {
     },
     config = function()
       local default_on_attach = function(client, bufnr)
-        if client.server_capabilities.documentSymbolProvider then
-          require('nvim-navic').attach(client, bufnr)
-        end
+        if client.server_capabilities.documentSymbolProvider then require('nvim-navic').attach(client, bufnr) end
       end
 
       -- Set signs for diagnostics
@@ -96,9 +92,7 @@ return {
             { '<leader>loi', '<cmd>LspPyrightOrganizeImports<cr>', desc = 'Organize imports', icon = '' },
             { '<leader>lspp', '<cmd>LspPyrightSetPythonPath<cr>', desc = 'Set python path', icon = '' },
           }
-          add_on_attach('basedpyright', function(_, bufnr)
-            wk.add(mappings, { buffer = bufnr })
-          end)
+          add_on_attach('basedpyright', function(_, bufnr) wk.add(mappings, { buffer = bufnr }) end)
           vim.lsp.enable('basedpyright')
         end,
         ['clangd'] = function()

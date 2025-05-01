@@ -29,30 +29,30 @@ return {
     config = true,
   },
   {
-    "coffebar/neovim-project",
+    'coffebar/neovim-project',
     lazy = false,
     priority = 100,
     opts = {
       last_session_on_startup = false,
       projects = { -- define project roots
-        "~/source/repos/*",
-        "~/AppData/Local/nvim",
-        "~/AppData/Local/nvim-data",
+        '~/source/repos/*',
+        '~/AppData/Local/nvim',
+        '~/AppData/Local/nvim-data',
         -- "~/AppData/Local/nvim-data/lazy/*",
       },
-      picker = { type = "telescope" },
+      picker = { type = 'telescope' },
       session_manager_opts = {
-        autosave_ignore_filetypes = { 'toggleterm' },
+        autosave_ignore_filetypes = { 'dap-view', 'dap-view-term', 'toggleterm' },
       },
     },
     init = function()
       -- enable saving the state of plugins in the session
-      vim.opt.sessionoptions:append("globals") -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+      vim.opt.sessionoptions:append('globals') -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
       require('which-key').add { '<leader>w', group = 'Projects' }
     end,
     dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      { "Shatur/neovim-session-manager" },
+      { 'nvim-lua/plenary.nvim' },
+      { 'Shatur/neovim-session-manager' },
     },
     keys = {
       { '<leader>ww', '<cmd>NeovimProjectDiscover<CR>', desc = 'Select project from history' },
@@ -141,7 +141,7 @@ return {
   },
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufRead',
+    lazy = false, -- The plugin is implementing its own lazy loading
     opts = {
       sign_priority = 100,
       current_line_blame = true,
@@ -175,7 +175,7 @@ return {
           { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
           { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = git.diff },
           { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
-          bufnr = bufnr,
+          buffer = bufnr,
         }
       end,
     },

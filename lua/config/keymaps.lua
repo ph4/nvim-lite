@@ -50,9 +50,6 @@ tmap('<C-j>', [[<cmd>wincmd j<CR>]], 'Move to the split below')
 tmap('<C-k>', [[<cmd>wincmd k<CR>]], 'Move to the split above')
 tmap('<C-l>', [[<cmd>wincmd l<CR>]], 'Move to the right split')
 
-nmap('<leader>pb', '<cmd>DapToggleBreakpoint<CR>')
-nmap('<leader>pr', '<cmd>DapContinue<CR>')
-
 -- LSP
 nmap('gD', vim.lsp.buf.declaration, 'Go to declaration')
 nmap('gd', vim.lsp.buf.definition, 'Go to definition')

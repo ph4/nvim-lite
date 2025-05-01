@@ -12,28 +12,20 @@ end
 
 return {
   {
-    'rcarriga/nvim-dap-ui',
-    event = 'VeryLazy',
-    dependencies = {
-      'mfussenegger/nvim-dap',
-      'nvim-neotest/nvim-nio',
-    },
-    opts = {
-      icons = { expanded = '', collapsed = '', current_frame = '▶' },
-    },
-    config = function(_, opts)
-      local dap = require('dap')
-
-      local dapui = require('dapui')
-      dapui.setup(opts)
-
-      dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
-    end,
-  },
-  {
     'jay-babu/mason-nvim-dap.nvim',
     event = 'VeryLazy',
     dependencies = {
+      {
+        'igorlfs/nvim-dap-view',
+        opts = {
+          switchbuf = 'useopen,uselast',
+          windows = {
+            terminal = {
+              position = 'right',
+            },
+          },
+        }
+      },
       'williamboman/mason.nvim',
       'mfussenegger/nvim-dap',
       'mfussenegger/nvim-dap-python',
@@ -42,21 +34,83 @@ return {
     },
     opts = {
       handlers = {
-        function (config)
-          require('mason-nvim-dap').default_setup(config)
-        end,
+        function(config) require('mason-nvim-dap').default_setup(config) end,
         python = function(_)
           local debugpy_path = require('mason-registry').get_package('debugpy'):get_install_path()
           local python_path = debugpy_path .. '/venv/Scripts/python'
           require('dap-python').setup(python_path)
-        end
+        end,
       },
       ensure_installed = { 'codelldb', 'debugpy' },
     },
     config = function(_, opts)
+      local dap = require('dap')
+      local dap_view = require('dap-view')
+      dap.listeners.before.launch['dap-view-config'] = function() dap_view.open() end
+      dap.listeners.before.attach['dap-view-config'] = function() dap_view.open() end
+
       require('mason-nvim-dap').setup(opts)
-      require('nvim-dap-virtual-text').setup({})
+      require('nvim-dap-virtual-text').setup {}
       require('which-key').add { '<leader>e', group = 'Debug' }
+
+      local mappings = {
+        { '<leader>eq', function() dap_view.toggle(true) end },
+
+        { '<leader>eb', function() dap.toggle_breakpoint() end, desc = 'Breakpoint' },
+        {
+          '<leader>eB',
+          function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
+          desc = 'Conditional breakpoint',
+        },
+
+        {
+          '<leader>p',
+          function()
+            local on_done = function()
+              if vim.g.build_function ~= nil then
+                if not vim.g.build_function() then
+                  vim.notify('Build failed', vim.log.levels.ERROR)
+                  return
+                end
+              else
+              end
+              if vim.g.debug_config ~= nil then
+                dap.run(vim.g.debug_config)
+              else
+                dap.run_last()
+              end
+            end
+
+            if dap.session() ~= nil then
+              dap.terminate(nil, nil, on_done) -- Will break if more than one session
+            else
+              on_done()
+            end
+          end,
+          desc = 'DAP (Re)Run',
+        },
+        { '<leader>P', function() dap.continue { before = get_args } end, desc = 'DAP Run with Args' },
+        -- stylua: ignore start
+        { '<leader>ec', function() dap.continue()   end, desc = 'Continue' },
+        { '<leader>er', function() dap.run_last()   end, desc = 'Run Last' },
+        { '<leader>ep', function() dap.pause()      end, desc = 'Pause' },
+        { '<leader>et', function() dap.terminate()  end, desc = 'Terminate' },
+        { '<leader>ei', function() dap.step_into()  end, desc = 'Step Into' },
+        { '<leader>eO', function() dap.step_out()   end, desc = 'Step Out' },
+        { '<leader>eo', function() dap.step_over()  end, desc = 'Step Over' },
+
+        { '<leader>eJ', function() dap.run_to_cursor() end, desc = 'Run to Cursor' },
+        { '<leader>eg', function() dap.goto_() end, desc = 'Go to line (no execute)' },
+
+        { '<leader>ej', function() dap.down() end, desc = 'Down' },
+        { '<leader>ek', function() dap.up() end, desc = 'Up' },
+
+        { '<leader>er', function() dap.repl.toggle() end, desc = 'Toggle REPL' },
+        { '<leader>es', function() dap.session() end, desc = 'Session' },
+        -- stylua: ignore end
+      }
+      require('which-key').add(mappings)
+
       local Hydra = require('hydra')
       Hydra {
         name = '',
@@ -64,42 +118,11 @@ return {
         body = '<leader>e',
         color = 'pink',
         heads = {
-          { 'i', '<cmd> DapStepInto <CR>', { desc = 'Step Into' } },
-          { 'o', '<cmd> DapStepOver <CR>', { desc = 'Step Over' } },
-          { 'O', '<cmd> DapStepOut <CR>', { desc = 'Step Out' } },
+          { 'i', dap.step_into, { desc = 'Step Into' } },
+          { 'o', dap.step_over, { desc = 'Step Over' } },
+          { 'O', dap.step_out, { desc = 'Step Out' } },
         },
       }
     end,
-    keys = {
-      { '<leader>eq', function() require('dapui').close() end },
-      { '<leader>et', function() require('dapui').toggle() end },
-      { '<leader>eo', function() require('dapui').open() end },
-
-      { '<leader>eb', function() require('dap').toggle_breakpoint() end, desc = 'Breakpoint' },
-      {
-        '<leader>eB',
-        function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
-        desc = 'Conditional breakpoint',
-      },
-
-      { '<leader>p', function() require('dap').continue() end, desc = 'DAP Continue' },
-      { '<leader>P', function() require('dap').continue { before = get_args } end, desc = 'DAP Run with Args' },
-      { '<leader>er', function() require('dap').run_last() end, desc = 'Run Last' },
-      { '<leader>ep', function() require('dap').pause() end, desc = 'Pause' },
-      { '<leader>ec', function() require('dap').terminate() end, desc = 'Terminate' },
-
-      { '<leader>ei', function() require('dap').step_into() end, desc = 'Step Into' },
-      { '<leader>eO', function() require('dap').step_out() end, desc = 'Step Out' },
-      { '<leader>eo', function() require('dap').step_over() end, desc = 'Step Over' },
-
-      { '<leader>eJ', function() require('dap').run_to_cursor() end, desc = 'Run to Cursor' },
-      { '<leader>eg', function() require('dap').goto_() end, desc = 'Go to line (no execute)' },
-
-      { '<leader>ej', function() require('dap').down() end, desc = 'Down' },
-      { '<leader>ek', function() require('dap').up() end, desc = 'Up' },
-
-      { '<leader>er', function() require('dap').repl.toggle() end, desc = 'Toggle REPL' },
-      { '<leader>es', function() require('dap').session() end, desc = 'Session' },
-    },
   },
 }

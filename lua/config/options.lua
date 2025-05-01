@@ -38,3 +38,5 @@ vim.api.nvim_set_hl(0, 'CursorLineSign', { link = 'CursorLine' })
 opt.laststatus = 3
 
 opt.virtualedit = 'block'
+
+opt.title = true

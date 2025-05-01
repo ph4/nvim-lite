@@ -1,3 +1,18 @@
+local function library()
+  local ret = vim.api.nvim_get_runtime_file('', true)
+  -- Hack to remove so dap has correct defintions
+  -- because mason.nvim contains dap.lua
+  for i = 1, #ret do
+    if ret[i]:find('mason[.]nvim') then
+      table.remove(ret, i)
+      break
+    end
+  end
+  return ret
+end
+
+local function runtime() end
+
 return {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
@@ -19,7 +34,7 @@ return {
       },
       workspace = {
         checkThirdParty = false,
-        library = vim.api.nvim_get_runtime_file('', true),
+        library = library(),
         maxPreload = 10000,
         preloadFileSize = 50000,
       },

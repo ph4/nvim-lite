@@ -5,14 +5,6 @@ M.named_terminals = {}
 
 function M.execute_command(name, command)
   local is_windows = vim.fn.has('win32') == 1
-  local shell = vim.o.shell
-
-  -- Ensure proper exit syntax based on shell
-  if is_windows and shell:match('cmd.exe') then
-    command = command .. ' && exit'
-  else
-    command = command .. ' ; exit'
-  end
 
   local term_buf = M.named_terminals[name]
 
@@ -53,10 +45,13 @@ function M.execute_command(name, command)
     term_win = vim.api.nvim_get_current_win()
   end
 
+  vim.api.nvim_set_option_value('filetype', 'build_terminal', { buf = term_buf })
+
   M.named_terminals[name] = term_buf
 
+  local job_id
   vim.api.nvim_buf_call(term_buf, function()
-    vim.fn.jobstart(command, {
+    job_id = vim.fn.jobstart(command, {
       term = true,
       height = vim.api.nvim_win_get_height(term_win),
       width = vim.api.nvim_win_get_width(term_win),
@@ -72,6 +67,19 @@ function M.execute_command(name, command)
 
   -- Set buffer name for easy identification
   vim.api.nvim_buf_set_name(term_buf, 'term://' .. name)
+  return job_id, term_buf
 end
+
+local function get_stem(path)
+  local parts
+  if string.match(path, '\\') then
+    parts = vim.split(path, '\\')
+  else
+    parts = vim.split(path, '/')
+  end
+  return parts[#parts]
+end
+
+M.titlestring = function() return string.format('[nvim] %s', get_stem(vim.fn.getcwd())) end
 
 return M

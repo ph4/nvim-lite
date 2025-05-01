@@ -19,6 +19,7 @@ return {
   },
   {
     'klen/nvim-config-local',
+    priority = 101, -- before nvim-project
     lazy = false,
     config = true,
   },
