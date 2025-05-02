@@ -20,7 +20,6 @@ return {
       { '<S-h>', [[<cmd>BufferLineCyclePrev<CR>]] },
       { '<]b>', [[<cmd>BufferLineCycleNext<CR>]] },
       { '<[b>', [[<cmd>BufferLineCyclePrev<CR>]] },
-      { '<leader>bb', '<cmd>e #<cr>', desc = 'Switch to Other Buffer' },
       { '<leader>`', '<cmd>e #<cr>', desc = 'Switch to Other Buffer' },
     },
   },
@@ -167,14 +166,13 @@ return {
         local wk = require('which-key')
         local git = icons.git.actions
         wk.add {
-          { '<leader>h', group = 'Git hunks' },
-          { '<leader>hs', gs.stage_hunk, desc = 'Stage Hunk', icon = git.stage },
-          { '<leader>hu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = git.unstage },
-          { '<leader>hr', gs.reset_hunk, desc = 'Reset Hunk', icon = git.reset },
-          { '<leader>hp', gs.preview_hunk, desc = 'Preview Hunk', icon = git.preview },
-          { '<leader>hb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
-          { '<leader>hd', gs.diffthis, desc = 'Diff This', icon = git.diff },
-          { '<leader>hD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
+          { '<leader>gs', gs.stage_hunk, desc = 'Stage Hunk', icon = git.stage },
+          { '<leader>gu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = git.unstage },
+          { '<leader>gr', gs.reset_hunk, desc = 'Reset Hunk', icon = git.reset },
+          { '<leader>gp', gs.preview_hunk, desc = 'Preview Hunk', icon = git.preview },
+          { '<leader>gb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
+          { '<leader>gd', gs.diffthis, desc = 'Diff This', icon = git.diff },
+          { '<leader>gD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
           buffer = bufnr,
         }
       end,

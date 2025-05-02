@@ -103,7 +103,7 @@ return {
           local devicons = require('nvim-web-devicons')
           local icon = devicons.get_icon('c', nil, { default = true })
           local mappings = {
-            { '<leader>j', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
+            { '<leader>h', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
             { '<leader>ls', '<cmd>ClangdSymbolInfo<cr>>', desc = 'Show symbol info', icon = icon },
             { '<leader>lt', '<cmd>ClangdTypeHierarchy<cr>', desc = 'Show type hierarchy', icon = icon },
           }

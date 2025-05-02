@@ -96,3 +96,5 @@ nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'Add folder to workspace')
 nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'Remove folder from workspace')
 nmap('<leader>lwd', vim.diagnostic.setqflist, 'Workspace diagnostics')
 nmap('<leader>lwl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, 'List workspace folders')
+
+vim.keymap.set('n', '<leader>o', vim.g.build_function, { desc = 'Build' })

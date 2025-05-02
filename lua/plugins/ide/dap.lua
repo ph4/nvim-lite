@@ -56,6 +56,7 @@ return {
       local mappings = {
         { '<leader>eq', function() dap_view.toggle(true) end },
 
+        { '<leader>b', function() dap.toggle_breakpoint() end, desc = 'Breakpoint' },
         { '<leader>eb', function() dap.toggle_breakpoint() end, desc = 'Breakpoint' },
         {
           '<leader>eB',
@@ -66,18 +67,22 @@ return {
         {
           '<leader>p',
           function()
-            local on_done = function()
-              if vim.g.build_function ~= nil then
-                if not vim.g.build_function() then
-                  vim.notify('Build failed', vim.log.levels.ERROR)
-                  return
-                end
-              else
+
+            local on_build_done = function(job, code)
+              if code ~= 0 then
+                vim.notify('Build failed', vim.log.levels.ERROR)
+                return
               end
+              pcall(vim.api.nvim_buf_delete, job.term_buf, { force = true })
               if vim.g.debug_config ~= nil then
                 dap.run(vim.g.debug_config)
               else
                 dap.run_last()
+              end
+            end
+            local on_done = function()
+              if vim.g.build_function ~= nil then
+                vim.g.build_function(on_build_done)
               end
             end
 

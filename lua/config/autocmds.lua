@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd('FileType', {
 ---@param layout any[]
 ---@param winid integer
 ---@return integer[]?
-local function get_directry_above(layout, winid)
+local function get_directry_above_if_has_2_above_in_col(layout, winid)
   if layout == nil or #layout == 0 then
     return nil
   end
@@ -75,39 +75,39 @@ local function get_directry_above(layout, winid)
     return nil
   elseif layout[1] == 'col' then
     local above = nil
+    local above_above = nil
     for _, v in ipairs(layout[2]) do
-      if v[1] == 'leaf' and v[2] == winid then
-        if above ~= nil then
+      if v[1] == 'leaf' then
+        if v[2] == winid and above ~= nil and above_above ~= nil then
           if above[1] == 'leaf' then
             return { above[2] }
-            elseif above[1] == 'row' then
-              return vim.iter(above[2])
-              :filter(function(i) return i[1] == 'leaf' end)
-              :map(function(i) return i[2] end)
-              :totable()
-            elseif above[1] == 'col' then
-              error('unreachable')
-            end
+          elseif above[1] == 'row' then
+            return vim.iter(above[2])
+            :filter(function(i) return i[1] == 'leaf' end)
+            :map(function(i) return i[2] end)
+            :totable()
+          elseif above[1] == 'col' then
+            error('unreachable')
+          end
         end
-        return above
-      end
-      if v[1] == 'col' or v[1] == 'row' then
-        local res = get_directry_above(v, winid)
+      elseif v[1] == 'col' or v[1] == 'row' then
+        local res = get_directry_above_if_has_2_above_in_col(v, winid)
         if res ~= nil then
           return res
         end
       end
+      above_above = above
       above = v
     end
   elseif layout[1] == 'row' then
-    return get_directry_above(layout[2], winid)
+    return get_directry_above_if_has_2_above_in_col(layout[2], winid)
   end
 end
 
 vim.api.nvim_create_autocmd('WinClosed', {
   callback = function()
     local winid = vim.fn.win_getid()
-    local above = get_directry_above(vim.fn.winlayout(), winid)
+    local above = get_directry_above_if_has_2_above_in_col(vim.fn.winlayout(), winid)
     if above ~= nil then
       local heights = {}
       for _, w in ipairs(above) do
