@@ -24,7 +24,7 @@ return {
               position = 'right',
             },
           },
-        }
+        },
       },
       'williamboman/mason.nvim',
       'mfussenegger/nvim-dap',
@@ -54,6 +54,7 @@ return {
       require('which-key').add { '<leader>e', group = 'Debug' }
 
       local mappings = {
+
         { '<leader>eq', function() dap_view.toggle(true) end },
 
         { '<leader>b', function() dap.toggle_breakpoint() end, desc = 'Breakpoint' },
@@ -67,7 +68,6 @@ return {
         {
           '<leader>p',
           function()
-
             local on_build_done = function(job, code)
               if code ~= 0 then
                 vim.notify('Build failed', vim.log.levels.ERROR)
@@ -81,9 +81,7 @@ return {
               end
             end
             local on_done = function()
-              if vim.g.build_function ~= nil then
-                vim.g.build_function(on_build_done)
-              end
+              if vim.g.build_function ~= nil then vim.g.build_function(on_build_done) end
             end
 
             if dap.session() ~= nil then
@@ -94,8 +92,9 @@ return {
           end,
           desc = 'DAP (Re)Run',
         },
-        { '<leader>P', function() dap.continue { before = get_args } end, desc = 'DAP Run with Args' },
         -- stylua: ignore start
+        { '<leader>P', function() dap.continue { before = get_args } end, desc = 'DAP Run with Args' },
+
         { '<leader>ec', function() dap.continue()   end, desc = 'Continue' },
         { '<leader>er', function() dap.run_last()   end, desc = 'Run Last' },
         { '<leader>ep', function() dap.pause()      end, desc = 'Pause' },

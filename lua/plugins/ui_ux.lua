@@ -14,13 +14,13 @@ return {
     config = true,
     event = 'VeryLazy',
     keys = {
-      { '<Tab>', [[<cmd>BufferLineCycleNext<CR>]] },
-      { '<S-Tab>', [[<cmd>BufferLineCyclePrev<CR>]] },
-      { '<S-l>', [[<cmd>BufferLineCycleNext<CR>]] },
-      { '<S-h>', [[<cmd>BufferLineCyclePrev<CR>]] },
-      { '<]b>', [[<cmd>BufferLineCycleNext<CR>]] },
-      { '<[b>', [[<cmd>BufferLineCyclePrev<CR>]] },
-      { '<leader>`', '<cmd>e #<cr>', desc = 'Switch to Other Buffer' },
+      { '<Tab>',     [[<cmd>BufferLineCycleNext<CR>]] },
+      { '<S-Tab>',   [[<cmd>BufferLineCyclePrev<CR>]] },
+      { '<S-l>',     [[<cmd>BufferLineCycleNext<CR>]] },
+      { '<S-h>',     [[<cmd>BufferLineCyclePrev<CR>]] },
+      { '<]b>',      [[<cmd>BufferLineCycleNext<CR>]] },
+      { '<[b>',      [[<cmd>BufferLineCyclePrev<CR>]] },
+      { '<leader>`', '<cmd>e #<cr>',                  desc = 'Switch to Other Buffer' },
     },
   },
   {
@@ -54,10 +54,10 @@ return {
       { 'Shatur/neovim-session-manager' },
     },
     keys = {
-      { '<leader>ww', '<cmd>NeovimProjectDiscover<CR>', desc = 'Select project from history' },
-      { '<leader>wh', '<cmd>NeovimProjectHistory<CR>', desc = 'Select project from history' },
+      { '<leader>ww', '<cmd>NeovimProjectDiscover<CR>',   desc = 'Select project from history' },
+      { '<leader>wh', '<cmd>NeovimProjectHistory<CR>',    desc = 'Select project from history' },
       { '<leader>wl', '<cmd>NeovimProjectLoadRecent<CR>', desc = 'Load last project' },
-      { '<leader>wc', '<cmd>NeovimProjectLoad .<CR>', desc = 'Load session for cwd' },
+      { '<leader>wc', '<cmd>NeovimProjectLoad .<CR>',     desc = 'Load session for cwd' },
     },
   },
   {
@@ -166,13 +166,20 @@ return {
         local wk = require('which-key')
         local git = icons.git.actions
         wk.add {
-          { '<leader>gs', gs.stage_hunk, desc = 'Stage Hunk', icon = git.stage },
+          --stylua: ignore start
+          { '<leader>gs', gs.stage_hunk,      desc = 'Stage Hunk',   icon = git.stage },
           { '<leader>gu', gs.undo_stage_hunk, desc = 'Unstage Hunk', icon = git.unstage },
-          { '<leader>gr', gs.reset_hunk, desc = 'Reset Hunk', icon = git.reset },
-          { '<leader>gp', gs.preview_hunk, desc = 'Preview Hunk', icon = git.preview },
-          { '<leader>gb', gs.blame_line, desc = 'Git Blame', icon = git.blame },
-          { '<leader>gd', gs.diffthis, desc = 'Diff This', icon = git.diff },
-          { '<leader>gD', function() gs.diffthis('~') end, desc = 'Diff This (cached)', icon = git.diff },
+          { '<leader>gr', gs.reset_hunk,      desc = 'Reset Hunk',   icon = git.reset },
+          { '<leader>gp', gs.preview_hunk,    desc = 'Preview Hunk', icon = git.preview },
+          { '<leader>gb', gs.blame_line,      desc = 'Git Blame',    icon = git.blame },
+          { '<leader>gd', gs.diffthis,        desc = 'Diff This',    icon = git.diff },
+          {
+            '<leader>gD',
+            function() gs.diffthis('~') end,
+            desc = 'Diff This (cached)',
+            icon = git.diff,
+          },
+          --stylua ignore end
           buffer = bufnr,
         }
       end,
@@ -253,7 +260,7 @@ return {
 
         local diagnostic_component = diagnostic_icon
             and { ' ' .. diagnostic_icon.text .. diagnostic_count, group = diagnostic_icon.texthl }
-          or ''
+            or ''
 
         -- Filename
         local buf_path = vim.api.nvim_buf_get_name(props.buf)
@@ -274,6 +281,55 @@ return {
           ' ',
         }
       end,
+    },
+  },
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {
+      indent = {
+        char = '▏',
+        -- char = '│',
+        -- char = '┊',
+      },
+    },
+  },
+  {
+    'ph4/legendary.nvim',
+    branch = 'extension-smart-splits',
+    opts = {
+      extensions = {
+        smart_splits = {
+          directions = { 'h', 'j', 'k', 'l' },
+          mods = {
+            move = '<C>',
+            resize = {
+              mod = '<M>',
+            },
+            swap = '<C-\\>',
+          },
+        },
+      },
+    },
+  },
+  {
+    'mrjones2014/smart-splits.nvim',
+    opts = {
+      default_amount = 2,
+    },
+  },
+  {
+    'stevearc/aerial.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    keys = {
+      { '<leader>ta', '<cmd>AerialToggle! left<cr>', desc = 'Toggle aerial' },
     },
   },
 }

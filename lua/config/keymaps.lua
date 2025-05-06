@@ -44,11 +44,16 @@ end
 tmap([[<C-\><C-t>]], toggle_esc, 'Toggle esc to exit terminal mode')
 nmap([[<C-\><C-t>]], toggle_esc, 'Toggle esc to exit terminal mode')
 
---tmap('jk', [[<C-\><C-n>]])
+-- --tmap('jk', [[<C-\><C-n>]])
 tmap('<C-h>', [[<cmd>wincmd h<CR>]], 'Move to the left split')
 tmap('<C-j>', [[<cmd>wincmd j<CR>]], 'Move to the split below')
 tmap('<C-k>', [[<cmd>wincmd k<CR>]], 'Move to the split above')
 tmap('<C-l>', [[<cmd>wincmd l<CR>]], 'Move to the right split')
+--
+-- nmap('<M-=>', '<cmd>wincmd 2+<cr>', 'Move to the left split')
+-- nmap('<M-->', '<cmd>wincmd 2-<cr>', 'Move to the split below')
+-- nmap('<M-\\.>', '<cmd>wincmd 2\\><cr>', 'Move to the split above')
+-- nmap('<M-\\,>', '<cmd>wincmd 2\\<<cr>', 'Move to the right split')
 
 -- LSP
 nmap('gD', vim.lsp.buf.declaration, 'Go to declaration')
@@ -70,7 +75,7 @@ end
 nmap('K', hover, 'Document hover')
 
 nmap('<leader>r', vim.lsp.buf.rename, 'Rename symbol')
-nmap('<leader>a', vim.lsp.buf.code_action, 'Code action')
+-- nmap('<leader>a', vim.lsp.buf.code_action, 'Code action')
 
 if wk then whichkey.add { '<leader>l', group = '+LSP' } end
 nmap('<leader>ld', vim.diagnostic.setloclist, 'Document diagnostics')
@@ -91,10 +96,19 @@ local peek_definition = function()
 end
 nmap('<leader>lp', peek_definition, 'Peek definition')
 
+local toggle_inlay_hints = function()
+  local enabled = vim.lsp.inlay_hint.is_enabled()
+  vim.lsp.inlay_hint.enable(not enabled)
+end
+nmap('<leader>li', toggle_inlay_hints, 'Toggle inlay hints')
+nmap('<leader>lh', toggle_inlay_hints, 'Toggle inlay hints')
+
 if wk then whichkey.add { '<leader>lw', group = 'Workspace' } end
 nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'Add folder to workspace')
 nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'Remove folder from workspace')
 nmap('<leader>lwd', vim.diagnostic.setqflist, 'Workspace diagnostics')
 nmap('<leader>lwl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, 'List workspace folders')
 
-vim.keymap.set('n', '<leader>o', vim.g.build_function, { desc = 'Build' })
+nmap('<leader>o', function()
+  if vim.g.build_function then vim.g.build_function() end
+end, 'Build')

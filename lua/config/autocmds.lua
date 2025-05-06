@@ -39,10 +39,9 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.api.nvim_create_autocmd(
-  'TextYankPost',
-  { callback = function() vim.highlight.on_yank { higroup = 'IncSearch', timeout = 300 } end }
-)
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function() vim.highlight.on_yank { higroup = 'IncSearch', timeout = 300 } end,
+})
 
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function() vim.o.titlestring = require('util').titlestring() end,
@@ -54,11 +53,8 @@ vim.api.nvim_create_autocmd('DirChanged', {
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'dap-view', 'dap-view-terminal' }, -- or whatever you need
-  callback = function()
-    vim.wo.winfixheight = false
-  end,
+  callback = function() vim.wo.winfixheight = true end,
 })
-
 
 ---Get window or windows directry above the given window
 ---Does not handle if has windows left or right in the same row
@@ -68,9 +64,7 @@ vim.api.nvim_create_autocmd('FileType', {
 ---@param winid integer
 ---@return integer[]?
 local function get_directry_above_if_has_2_above_in_col(layout, winid)
-  if layout == nil or #layout == 0 then
-    return nil
-  end
+  if layout == nil or #layout == 0 then return nil end
   if layout[1] == 'leaf' then
     return nil
   elseif layout[1] == 'col' then
@@ -82,19 +76,18 @@ local function get_directry_above_if_has_2_above_in_col(layout, winid)
           if above[1] == 'leaf' then
             return { above[2] }
           elseif above[1] == 'row' then
-            return vim.iter(above[2])
-            :filter(function(i) return i[1] == 'leaf' end)
-            :map(function(i) return i[2] end)
-            :totable()
+            return vim
+              .iter(above[2])
+              :filter(function(i) return i[1] == 'leaf' end)
+              :map(function(i) return i[2] end)
+              :totable()
           elseif above[1] == 'col' then
             error('unreachable')
           end
         end
       elseif v[1] == 'col' or v[1] == 'row' then
         local res = get_directry_above_if_has_2_above_in_col(v, winid)
-        if res ~= nil then
-          return res
-        end
+        if res ~= nil then return res end
       end
       above_above = above
       above = v
@@ -111,9 +104,7 @@ vim.api.nvim_create_autocmd('WinClosed', {
     if above ~= nil then
       local heights = {}
       for _, w in ipairs(above) do
-        if vim.wo[w].winfixheight then
-          heights[w] = vim.api.nvim_win_get_height(w)
-        end
+        if vim.wo[w].winfixheight then heights[w] = vim.api.nvim_win_get_height(w) end
       end
       vim.schedule(function()
         for w, h in pairs(heights) do
@@ -123,4 +114,3 @@ vim.api.nvim_create_autocmd('WinClosed', {
     end
   end,
 })
-

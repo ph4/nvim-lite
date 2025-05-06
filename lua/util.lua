@@ -26,28 +26,27 @@ function M.execute_command(name, command, on_exit)
     if job_still_running then
       -- Send interrupt or terminate
       if is_windows then
-        vim.fn.jobstop(chan_id)          -- Best effort on Windows
+        vim.fn.jobstop(chan_id) -- Best effort on Windows
       else
         vim.fn.chansend(chan_id, '\x03') -- Send Ctrl-C
-        vim.fn.jobstop(chan_id)          -- Force stop
+        vim.fn.jobstop(chan_id) -- Force stop
       end
     end
   end
 
   -- Chek if window is still valid
-  if term_win
-      and term_buf
-      and vim.api.nvim_win_is_valid(term_win)
-      and vim.api.nvim_win_get_buf(term_win) == term_buf
+  if
+    term_win
+    and term_buf
+    and vim.api.nvim_win_is_valid(term_win)
+    and vim.api.nvim_win_get_buf(term_win) == term_buf
   then
     vim.api.nvim_set_current_win(term_win)
     vim.cmd('enew')
     vim.api.nvim_buf_delete(term_buf, { force = true })
     term_buf = vim.api.nvim_get_current_buf()
   else
-    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
-      vim.api.nvim_buf_delete(term_buf, { force = true })
-    end
+    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then vim.api.nvim_buf_delete(term_buf, { force = true }) end
     vim.cmd('botright new')
     term_buf = vim.api.nvim_get_current_buf()
     term_win = vim.api.nvim_get_current_win()
@@ -61,9 +60,7 @@ function M.execute_command(name, command, on_exit)
     job_id = nil,
     term_buf = term_buf,
     on_exit = on_exit,
-    wait = function(self)
-      return vim.fn.jobwait({ self.job_id }, -1)[1]
-    end
+    wait = function(self) return vim.fn.jobwait({ self.job_id }, -1)[1] end,
   }
 
   vim.api.nvim_buf_call(term_buf, function()
@@ -77,9 +74,7 @@ function M.execute_command(name, command, on_exit)
         else
           vim.notify(name .. ' exited with code: ' .. code, vim.log.levels.ERROR)
         end
-        if obj.on_exit then
-          obj:on_exit(code)
-        end
+        if obj.on_exit then obj:on_exit(code) end
       end,
     })
   end)
