@@ -36,7 +36,7 @@ return {
       handlers = {
         function(config) require('mason-nvim-dap').default_setup(config) end,
         python = function(_)
-          local debugpy_path = require('mason-registry').get_package('debugpy'):get_install_path()
+          local debugpy_path = vim.fn.stdpath('data') .. '/mason/packages/debugpy'
           local python_path = debugpy_path .. '/venv/Scripts/python'
           require('dap-python').setup(python_path)
         end,

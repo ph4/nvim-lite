@@ -1,38 +1,40 @@
-local mason_handlers = {
-  function(server_name) vim.lsp.enable(server_name) end,
-  ['basedpyright'] = function()
-    vim.lsp.enable('basedpyright')
-    local wk = require('which-key')
-    local mappings = {
-      --stylua: ignore start
-      { '<leader>loi',  '<cmd>LspPyrightOrganizeImports<cr>', desc = 'Organize imports', icon = '' },
-      { '<leader>lspp', '<cmd>LspPyrightSetPythonPath<cr>',   desc = 'Set python path',  icon = '' },
-      --stylua: ignore end
-    }
-    vim.lsp.config('basedpyright', {
-      on_attach = function(_, bufnr) wk.add(mappings, { buffer = bufnr }) end,
-    })
-  end,
-  ['clangd'] = function()
-    local wk = require('which-key')
-    require('clangd_extensions').setup {}
-    vim.lsp.enable('clangd')
+local function mappings()
+  local wk = require('which-key')
+  vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(ev)
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      if not client then return end
+      local bufnr = ev.buf
+      local server_name = client.name
 
-    local devicons = require('nvim-web-devicons')
-    local icon = devicons.get_icon('c', nil, { default = true })
-    local mappings = {
-      --stylua: ignore start
-      { '<leader>h',  '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = icon },
-      { '<leader>ls', '<cmd>ClangdSymbolInfo<cr>>',        desc = 'Show symbol info',     icon = icon },
-      { '<leader>lt', '<cmd>ClangdTypeHierarchy<cr>',      desc = 'Show type hierarchy',  icon = icon },
-      --stylua: ignore end
-    }
-    --Replace default on_attach with wk.add
-    vim.lsp.config('clangd', {
-      on_attach = function(_, bufnr) wk.add(mappings, { buffer = bufnr }) end,
-    })
-  end,
-}
+
+      local devicons = require('nvim-web-devicons')
+
+      local py = devicons.get_icon('python', nil, { default = true })
+
+      if server_name == "basedpyright" then
+        wk.add({
+          --stylua: ignore start
+          { '<leader>loi',  '<cmd>LspPyrightOrganizeImports<cr>', desc = 'Organize imports', icon = py },
+          { '<leader>lspp', '<cmd>LspPyrightSetPythonPath<cr>',   desc = 'Set python path',  icon = py },
+          --stylua: ignore end
+        }, { buffer = bufnr })
+      else
+        if server_name == "clangd" then
+          local c = devicons.get_icon('c', nil, { default = true })
+          wk.add({
+            --stylua: ignore start
+            { '<leader>h',  '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch source header', icon = c },
+            { '<leader>ls', '<cmd>ClangdSymbolInfo<cr>>',        desc = 'Show symbol info',     icon = c },
+            { '<leader>lt', '<cmd>ClangdTypeHierarchy<cr>',      desc = 'Show type hierarchy',  icon = c },
+            --stylua: ignore end
+          }, { buffer = bufnr })
+        end
+      end
+    end
+  })
+end
+
 
 local function get_config_by_ft(filetype)
   local matching_configs = {}
@@ -137,21 +139,16 @@ return {
     end,
   },
   {
-    'neovim/nvim-lspconfig',
+    'neovim/mason-lspconfig.nvim',
     event = 'VeryLazy',
     dependencies = {
+      { 'neovim/nvim-lspconfig' },
       { 'https://git.sr.ht/~p00f/clangd_extensions.nvim' },
       { 'SmiteshP/nvim-navic' },
       {
         'williamboman/mason.nvim',
         init = function(_, opts) require('mason').setup(opts) end,
-        opts = {
-          registries = {
-            'github:ph4/mason-registry',
-          },
-        },
       },
-      { 'williamboman/mason-lspconfig.nvim', config = true },
     },
     config = function()
       -- Set signs for diagnostics
@@ -165,8 +162,11 @@ return {
 
       vim.lsp.config('*', { on_attach = default_on_attach })
 
-      require('mason-lspconfig').setup_handlers(mason_handlers)
-      vim.notify('setup_handlers')
+      mappings()
+      require('mason-lspconfig').setup {
+        automatic_enable = true,
+        ensure_installed = {},
+      }
       setup_signature_help()
 
       -- Manually attach LSP to existing buffers after lazy load

@@ -16,6 +16,6 @@ return {
       formatters_by_ft = {
         json = { 'jq', '--indent', '2' },
       },
-    }
-  }
+    },
+  },
 }
