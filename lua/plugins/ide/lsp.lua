@@ -139,14 +139,14 @@ return {
     end,
   },
   {
-    'neovim/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     event = 'VeryLazy',
     dependencies = {
       { 'neovim/nvim-lspconfig' },
       { 'https://git.sr.ht/~p00f/clangd_extensions.nvim' },
       { 'SmiteshP/nvim-navic' },
       {
-        'williamboman/mason.nvim',
+        'mason-org/mason.nvim',
         init = function(_, opts) require('mason').setup(opts) end,
       },
     },

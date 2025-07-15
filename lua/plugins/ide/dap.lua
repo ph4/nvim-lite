@@ -17,6 +17,7 @@ return {
     dependencies = {
       {
         'igorlfs/nvim-dap-view',
+        commit = 'fc03150',
         opts = {
           switchbuf = 'useopen,uselast',
           windows = {
