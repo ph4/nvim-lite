@@ -169,8 +169,8 @@ return {
       }
       setup_signature_help()
 
-      -- Manually attach LSP to existing buffers after lazy load
-      vim.defer_fn(function() attach_lsp_servers() end, 200)
+      -- -- Manually attach LSP to existing buffers after lazy load
+      -- vim.defer_fn(function() attach_lsp_servers() end, 200)
     end,
   },
 }
