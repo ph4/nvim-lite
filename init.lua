@@ -11,4 +11,4 @@ require('config.autocmds')
 
 vim.cmd([[set background=light]])
 vim.cmd([[colorscheme zenbones]])
-vim.cmd([[language en_US]])
+vim.cmd([[language C]])
