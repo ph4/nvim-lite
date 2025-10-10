@@ -15,6 +15,10 @@ return {
       },
       formatters_by_ft = {
         json = { 'jq', '--indent', '2' },
+        typescript = { 'prettierd' },
+        vue = { 'prettierd' },
+        lua = { 'stylua' },
+        html = { 'prettierd' },
       },
     },
   },

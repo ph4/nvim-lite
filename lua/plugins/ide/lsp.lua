@@ -165,7 +165,7 @@ return {
       mappings()
       require('mason-lspconfig').setup {
         automatic_enable = true,
-        ensure_installed = {},
+        ensure_installed = { 'lua_ls', 'jsonls', 'basedpyright' }
       }
       setup_signature_help()
 

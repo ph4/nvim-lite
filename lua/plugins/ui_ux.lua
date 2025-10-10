@@ -37,6 +37,9 @@ return {
         '~/source/repos/*',
         '~/AppData/Local/nvim',
         '~/AppData/Local/nvim-data',
+        '~/.config/nvim',
+        '~/.local/share/nvim',
+        '~/source/*'
         -- "~/AppData/Local/nvim-data/lazy/*",
       },
       picker = { type = 'telescope' },

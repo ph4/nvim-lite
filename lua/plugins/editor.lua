@@ -39,12 +39,12 @@ _H_ ^ ^ _L_  _<C-h>_: ◄, _<C-j>_: ▼
           { '<C-j>', 'xi<C-v>u25bc<Esc>' },
           { '<C-k>', 'xi<C-v>u25b2<Esc>' },
           { '<C-l>', 'xi<C-v>u25ba<Esc>' },
-          { 'H', '<C-v>h:VBox<CR>' },
-          { 'J', '<C-v>j:VBox<CR>' },
-          { 'K', '<C-v>k:VBox<CR>' },
-          { 'L', '<C-v>l:VBox<CR>' },
-          { 'f', ':VBox<CR>', { mode = 'v' } },
-          { '<C-c>', nil, { exit = true } },
+          { 'H',     '<C-v>h:VBox<CR>' },
+          { 'J',     '<C-v>j:VBox<CR>' },
+          { 'K',     '<C-v>k:VBox<CR>' },
+          { 'L',     '<C-v>l:VBox<CR>' },
+          { 'f',     ':VBox<CR>',        { mode = 'v' } },
+          { '<C-c>', nil,                { exit = true } },
         },
       }
     end,
@@ -69,4 +69,9 @@ _H_ ^ ^ _L_  _<C-h>_: ◄, _<C-j>_: ▼
       },
     },
   },
+  {
+    -- Heuristic indentation
+    'tpope/vim-sleuth',
+    event = 'BufRead',
+  }
 }
