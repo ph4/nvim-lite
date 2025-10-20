@@ -19,6 +19,8 @@ return {
         vue = { 'prettierd' },
         lua = { 'stylua' },
         html = { 'prettierd' },
+        go = { 'gofmt' },
+        rust = { 'rustfmt' },
       },
     },
   },
